@@ -3,19 +3,22 @@ var selected_field = "";
 var paleta = ['rgba(74,190,181,0.8)', 'rgba(24,138,156,0.8)', 'rgba(0,69,132,0.8)', 'rgba(0,30,123,0.8)', 'rgba(16,0,90,0.8)'];
 var borde = 'rgba(255,255,255,0)';
 
-function sync_k() {
-    $('#k').val($("#k_slider").slider("option", "value"));
+function set_wf() {
+    factor_progresion = $("#k_slider").slider("option", "value")
+    webber_cuts = bojorquezSerrano(factor_progresion);
+    layer.setStyle(style_5);
 }
 
-function sync_k_slider() {
-    $("#k_slider").slider("option", "value",
-			  $('#k').val());
-}
+
 $(document).ready(function() {
   $( "#k_slider" ).slider({max: 3,
 			     min: 1,
 			     value: 1,
-			     step: 0.1
+			     step: 0.1,
+			     change: function( event, ui ) {
+				 set_wf();
+				 
+			     }
 			    });
 
 });
