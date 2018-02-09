@@ -4,8 +4,9 @@ var paleta = ['rgba(74,190,181,0.8)', 'rgba(24,138,156,0.8)', 'rgba(0,69,132,0.8
 var borde = 'rgba(255,255,255,0)';
 
 function set_wf() {
-    factor_progresion = $("#k_slider").slider("option", "value")
+    factor_progresion = parseFloat($("#k_slider").slider("option", "value"))
     webber_cuts = bojorquezSerrano(factor_progresion);
+    document.getElementById("cuts").innerHTML = webber_cuts[5];
     layer.setStyle(style_5);
 }
 
@@ -46,12 +47,12 @@ function bojorquezSerrano(fp) {
     var bit = (maximum - minimum) / the_sum;
     var cuts = new Array();
     cuts.push(minimum)
-    for (i=0; i<categories; i++) {
+    for (i=0; i<categories-1; i++) {
 	prev = cuts[i];
 	cut = prev + Math.pow(fp, i) * bit;
 	cuts.push(cut);
     }
-
+    cuts.push(maximum);
     return cuts;
 }
 
@@ -171,7 +172,7 @@ map.getView().fit(extent, map.getSize());
 //map.getView().setZoom(map.getView().getZoom() + 1);
 
 
-var stats_div = document.getElementById('statistics');
+var stats_div = document.getElementById('stats');
 
 
 var highlightStyleCache = {};
@@ -185,7 +186,7 @@ var displayFeatureInfo = function (pixel) {
 
 	if (feature) {
 		
-		stats_div.innerHTML = "selected: 1";
+		stats_div.innerHTML = feature.get(selected_field);
 	}else{
 		vectorSource.clear();
 	    
@@ -202,6 +203,7 @@ var displayFeatureInfo = function (pixel) {
 		//}
 	    	if (feature) {
 			vectorSource.addFeature(feature);
+			stats_div.innerHTML = feature.get(selected_field);
 		}
 		highlight = feature;
 	}
