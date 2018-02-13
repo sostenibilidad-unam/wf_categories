@@ -72,22 +72,49 @@
 			    
 			 		
 			</div>   
-			 <div  class="ui segment">   
-			    <select id="fields" class="ui dropdown" onchange="displayField()">
-                      <option value="">Field</option>
-                      
-                    </select>
-				
-			</div>
+			 
 			<div class="ui segment">
-		  		<div class="ui form" id="args">
-		  		  </br>
-		  		  </br>
-                	  <div id="k_slider"></div>
-                	  
+		  		
+		  		  <div class="ui three column grid" style="margin-top: 0.5em;">
+        		  		  
+                         <div class="eight wide column">
+                            <select id="fields" class="ui dropdown" onchange="displayField()"></select>
+                        </div>
+                         <div class="four wide column">
+                            <div id="fp_slider"></div>
+                        </div>
+                        <div class="four wide column">
+            		  		  <div class="ui big input" style="width:100%">
+                            		<input placeholder="1" id="fp" value="{{ fp }}" onchange="sync_fp_slider(); sync_bar();">
+                            </div>
+                         </div> 
+                	  </div>
                 	  </br>
-                	  <div id="cuts"></div>
-				</div>
+                	  <img src="/color_bar/?fp=1&max=1&min=0" id="color_bar" width="100%" >
+                	  <div class="ui three column grid" style="margin-top: 0.5em;">
+                          
+                          <div class="three wide column">
+                              
+                              
+                              <div class="ui input" style="width:100%">
+                            		<input placeholder="1" id="min" value="{{ min }}" onchange="change_range();">
+                        	  </div>
+                          </div>
+                          <div class="ten wide column">
+                    	      
+                    	  </div>
+                          
+                          <div class="three wide column">
+                              
+                             <div class="ui input" style="width:100%">
+                        		<input placeholder="1" id="max" value="{{ max }}" onchange="change_range();">
+                        	  </div>
+                          </div>
+                          
+                        
+                    </div>
+                	  
+				
 			</div>
 			<div class="ui segment" id="stats">
 		  		

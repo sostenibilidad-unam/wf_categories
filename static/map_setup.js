@@ -1,40 +1,91 @@
 var layer_url = document.currentScript.getAttribute('layer_url');
 var selected_field = "";
+var range = {'max': 1, 'min': 0};
 var paleta = ['rgba(74,190,181,0.8)', 'rgba(24,138,156,0.8)', 'rgba(0,69,132,0.8)', 'rgba(0,30,123,0.8)', 'rgba(16,0,90,0.8)'];
 var borde = 'rgba(255,255,255,0)';
 
-function set_wf() {
-    factor_progresion = parseFloat($("#k_slider").slider("option", "value"))
+function change_range(){
+    console.log("kkkkk");
+    fp = parseFloat($('#fp').val());
+    range = {'max': parseFloat($('#max').val()), 'min': parseFloat($('#min').val())};
+    
+    webber_cuts = bojorquezSerrano(fp);
+    sync_bar();
+    layer.setStyle(style_5);
+    
+}
+
+
+function sync_fp() {
+    $('#fp').val($("#fp_slider").slider("option", "value"));
+}
+
+function sync_fp_slider() {
+    $("#fp_slider").slider("option", "value",
+			  $('#fp').val());
+}
+
+			  
+function sync_bar() {
+    
+    factor_progresion = parseFloat($("#fp_slider").slider("option", "value"))
     webber_cuts = bojorquezSerrano(factor_progresion);
-    document.getElementById("cuts").innerHTML = webber_cuts[5];
+    document.getElementById("color_bar").src="/color_bar/?fp=" + factor_progresion 
+                                                        + "&min=" + range['min']
+                                                        + "&max=" + range['max'];
+    
     layer.setStyle(style_5);
 }
 
 
 $(document).ready(function() {
-  $( "#k_slider" ).slider({max: 3,
+  $( "#fp_slider" ).slider({orientation: "vertical",
+                  max: 3,
 			     min: 1,
 			     value: 1,
 			     step: 0.1,
 			     change: function( event, ui ) {
-				 set_wf();
-				 
+				 sync_bar();
+				 sync_fp();
 			     }
 			    });
+    var fp = $('#fp').val();
+    
+    $(function() {
+        $("#fields").val(fields[1]);
+    });
+    
+    range = get_range(fields[1]);
+    
+    selected_field = fields[1];
+    webber_cuts = bojorquezSerrano(1.0);
+    $('#fp').val(1.0);
+    $('#max').val(range['max']);
+    $('#min').val(range['min']);
+    sync_fp_slider();
+    sync_bar();
+    layer.setStyle(style_5);
 
 });
 
 function displayField(){
+    
     var select = document.getElementById( 'fields' );
     selected_field = select.options[select.selectedIndex].value
-    webber_cuts = bojorquezSerrano(2.0);
+    range = get_range(selected_field);
+    webber_cuts = bojorquezSerrano(1.0);
+    $('#fp').val(1.0);
+    $('#max').val(range['max']);
+    $('#min').val(range['min']);
+    sync_fp_slider();
+    sync_bar();
     layer.setStyle(style_5);
     //layer.redraw();
 
 }
 
 function bojorquezSerrano(fp) {
-    var range = get_range(selected_field);
+    
     var categories = 5,
 	maximum = range['max'],
 	minimum = range['min'],
@@ -139,6 +190,7 @@ for( field in fields ) {
     
     
 };
+
 
 if ((geometry_type == "Polygon") || (geometry_type == "MultiPolygon")){
 	layer.setStyle(polygon_style);
