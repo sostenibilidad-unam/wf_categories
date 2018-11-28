@@ -8,7 +8,8 @@ from werkzeug import secure_filename
 import shapefile
 from jinja2 import Environment, FileSystemLoader
 
-
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -21,11 +22,11 @@ from json import dumps
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config['UPLOAD_FOLDER'] = './uploads/'
+app.config['UPLOAD_FOLDER'] = '/var/www/wf_categories/uploads/'
 
 ALLOWED_EXTENSIONS = ['prj', 'shp', 'dbf', 'shx']
 
-env = Environment(loader=FileSystemLoader('templates'))
+env = Environment(loader=FileSystemLoader('/var/www/wf_categories/templates'))
 
 @app.route('/wf_categories/<map_id>')
 def table(map_id):
@@ -43,9 +44,9 @@ def table(map_id):
 def serve_uploads(path):
     return send_from_directory('uploads', path)
 
-@app.route('/static/<path:path>')
-def serve_static(path):
-    return send_from_directory('static', path)
+#@app.route('/static/<path:path>')
+#def serve_static(path):
+#    return send_from_directory('static', path)
 
 
 def allowed_file(filename):
