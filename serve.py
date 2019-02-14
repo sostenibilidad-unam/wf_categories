@@ -8,9 +8,11 @@ from werkzeug import secure_filename
 import shapefile
 from jinja2 import Environment, FileSystemLoader
 
-
+import matplotlib
+matplotlib.use("Agg")
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import StringIO
@@ -185,7 +187,6 @@ def upload():
 
 if __name__ == '__main__':
     app.run(
-        host="0.0.0.0",
         port=5004,
         debug=True
     )
