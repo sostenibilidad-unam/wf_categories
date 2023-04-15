@@ -4,7 +4,7 @@
 import os
 
 from flask import Flask, make_response, render_template, jsonify, redirect, url_for, request, send_from_directory
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 import shapefile
 from jinja2 import Environment, FileSystemLoader
 
@@ -18,7 +18,7 @@ from matplotlib.figure import Figure
 
 import matplotlib.pyplot as plt
 from matplotlib import colors
-import StringIO
+from io import BytesIO
 import numpy
 
 import hashlib
@@ -30,7 +30,11 @@ app.config['UPLOAD_FOLDER'] = '/var/www/wf_categories/uploads/'
 
 ALLOWED_EXTENSIONS = ['prj', 'shp', 'dbf', 'shx']
 
-env = Environment(loader=FileSystemLoader('/var/www/wf_categories/templates'))
+env = Environment(loader=FileSystemLoader('templates'))
+
+@app.route("/")
+def root():
+    return redirect('/wf_categories/df', code=302)
 
 @app.route('/wf_categories/<map_id>')
 def table(map_id):
@@ -129,7 +133,7 @@ def color_bar():
     ax.get_yaxis().set_visible(False)
     fig.tight_layout()
     canvas = FigureCanvas(fig)
-    png_output = StringIO.StringIO()
+    png_output = BytesIO()
     canvas.print_png(png_output)
     response = make_response(png_output.getvalue())
     response.headers['Content-Type'] = 'image/png'
@@ -152,9 +156,9 @@ def upload():
             if f.filename.endswith(".shp"):
                 elShp = f.filename
             filenames.append(filename)
-    print os.path.join(app.config['UPLOAD_FOLDER'], elShp)
+    print(os.path.join(app.config['UPLOAD_FOLDER'], elShp))
     reader = shapefile.Reader(os.path.join(app.config['UPLOAD_FOLDER'], elShp))
-    print reader.shapeType
+    print(reader.shapeType)
     fields = reader.fields[1:]
     field_names = [field[0] for field in fields]
     buff = []
